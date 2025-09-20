@@ -62,7 +62,10 @@ export default function Topbar({ title }) {
         </Breadcrumbs>
 
         {/* Center: Search */}
-        <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}></Box>
+
+        {/* Right: Icons */}
+        <Box sx={{ display: "flex", gap: 1 }}>
           <SearchWrapper variant="outlined">
             <Search size={16} style={{ marginRight: 6, color: "#9e9e9e" }} />
             <InputBase
@@ -74,10 +77,6 @@ export default function Topbar({ title }) {
               ⌘ /
             </Typography>
           </SearchWrapper>
-        </Box>
-
-        {/* Right: Icons */}
-        <Box sx={{ display: "flex", gap: 1 }}>
           <IconButton size="small" color="default">
             <Sunny size={18} />
           </IconButton>
