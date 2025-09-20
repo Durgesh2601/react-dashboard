@@ -8,29 +8,37 @@ import {
   Breadcrumbs,
   Link,
   Paper,
+  Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   VerticalSplit,
   Sunny,
+  DarkMode,
   History,
   Notifications,
   Search,
   Star,
 } from "@mui/icons-material";
+import { useColorMode } from "../theme/ThemeContext";
 
 const SearchWrapper = styled(Paper)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: "2px 8px",
   borderRadius: 6,
-  backgroundColor: theme.palette.grey[100],
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800],
   minWidth: 200,
   flex: 1,
   maxWidth: 320,
 }));
 
 export default function Topbar({ title }) {
+  const { mode, toggleColorMode } = useColorMode();
+
   return (
     <AppBar
       position="static"
@@ -77,9 +85,13 @@ export default function Topbar({ title }) {
               ⌘ /
             </Typography>
           </SearchWrapper>
-          <IconButton size="small" color="default">
-            <Sunny size={18} />
-          </IconButton>
+          <Tooltip
+            title={`Switch to ${mode === "light" ? "dark" : "light"} mode`}
+          >
+            <IconButton size="small" onClick={toggleColorMode}>
+              {mode === "light" ? <DarkMode size={18} /> : <Sunny size={18} />}
+            </IconButton>
+          </Tooltip>
           <IconButton size="small" color="default">
             <History size={18} />
           </IconButton>

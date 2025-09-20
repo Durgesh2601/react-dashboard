@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   Collapse,
   Divider,
@@ -10,6 +11,7 @@ import {
   ListItemText,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import {
   Dashboard,
@@ -19,8 +21,6 @@ import {
   Person,
   AccountCircle,
   Business,
-  Description,
-  People,
   Menu as MenuIcon,
   ExpandLess,
   ExpandMore,
@@ -34,6 +34,8 @@ const drawerWidth = 260;
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const [subOpen, setSubOpen] = useState({});
+  const theme = useTheme();
+  const location = useLocation();
 
   const toggleDrawer = () => setOpen(!open);
 
@@ -51,6 +53,7 @@ const Sidebar = () => {
           width: open ? drawerWidth : 72,
           boxSizing: "border-box",
           transition: "width 0.3s",
+          border: "none",
         },
       }}
     >
@@ -70,7 +73,9 @@ const Sidebar = () => {
       <List>
         {/* Favorites Section */}
         {open && (
-          <Typography sx={{ px: 2, py: 1, fontSize: 12, color: "gray" }}>
+          <Typography
+            sx={{ px: 2, py: 1, fontSize: 12, color: "text.secondary" }}
+          >
             Favorites
           </Typography>
         )}
@@ -89,21 +94,31 @@ const Sidebar = () => {
 
         {/* Dashboards Section */}
         {open && (
-          <Typography sx={{ px: 2, py: 1, fontSize: 12, color: "gray" }}>
+          <Typography
+            sx={{ px: 2, py: 1, fontSize: 12, color: "text.secondary" }}
+          >
             Dashboards
           </Typography>
         )}
-        <ListItemButton selected>
+        <ListItemButton
+          component={Link}
+          to="/"
+          selected={location.pathname === "/"}
+        >
           <ListItemIcon>
             <Dashboard />
           </ListItemIcon>
           {open && <ListItemText primary="Default" />}
         </ListItemButton>
-        <ListItemButton>
+        <ListItemButton
+          component={Link}
+          to="/orders"
+          selected={location.pathname === "/orders"}
+        >
           <ListItemIcon>
             <ShoppingCart />
           </ListItemIcon>
-          {open && <ListItemText primary="eCommerce" />}
+          {open && <ListItemText primary="Orders" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
