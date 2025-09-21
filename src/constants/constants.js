@@ -12,3 +12,19 @@ export const cardColors = {
     { bg: "#E5ECF6", text: "#1C1C1C" }, // Growth - dark blue-gray
   ],
 };
+
+export const RevenueChart = {
+  light: {
+    bg: "#F7F9FB",
+    text: "rgba(0, 0, 0, 0.87)",
+  },
+  dark: {
+    bg: "rgba(66, 66, 66, 0.15)",
+    text: "#fff",
+  },
+};
+
+export const gridStyle = {
+  borderRadius: "16px",
+  padding: "24px",
+};
