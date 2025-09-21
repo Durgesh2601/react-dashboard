@@ -12,118 +12,44 @@ import {
   Checkbox,
   Avatar,
   Chip,
+  InputBase,
+  Pagination,
+  Grid,
 } from "@mui/material";
-import { Add, FilterList, Sort } from "@mui/icons-material";
+import { Add, FilterList, Search, Sort } from "@mui/icons-material";
+import { useColorMode } from "../theme/ThemeContext";
+import { ORDER_LIST_ACTIONS_STYLES, ORDERS_MOCK } from "../constants/constants";
+import { SearchWrapper } from "../components/helpers";
+import { getStatusColor } from "../utils";
+import { useState } from "react";
 
-const orders = [
-  {
-    id: "#CM9801",
-    user: { name: "Natali Craig", avatar: "/avatars/natali.jpg" },
-    project: "Landing Page",
-    address: "Meadow Lane Oakland",
-    date: "Just now",
-    status: "In Progress",
-  },
-  {
-    id: "#CM9802",
-    user: { name: "Kate Morrison", avatar: "/avatars/kate.jpg" },
-    project: "CRM Admin pages",
-    address: "Larry San Francisco",
-    date: "A minute ago",
-    status: "Complete",
-  },
-  {
-    id: "#CM9803",
-    user: { name: "Drew Cano", avatar: "/avatars/drew.jpg" },
-    project: "Client Project",
-    address: "Bagwell Avenue Ocala",
-    date: "1 hour ago",
-    status: "Pending",
-  },
-  {
-    id: "#CM9804",
-    user: { name: "Orlando Diggs", avatar: "/avatars/orlando.jpg" },
-    project: "Admin Dashboard",
-    address: "Washburn Baton Rouge",
-    date: "Yesterday",
-    status: "Approved",
-  },
-  {
-    id: "#CM9805",
-    user: { name: "Andi Lane", avatar: "/avatars/andi.jpg" },
-    project: "App Landing Page",
-    address: "Nest Lane Olivette",
-    date: "Feb 2, 2023",
-    status: "Rejected",
-  },
-  // Duplicated rows as in the screenshot
-  {
-    id: "#CM9801",
-    user: { name: "Natali Craig", avatar: "/avatars/natali.jpg" },
-    project: "Landing Page",
-    address: "Meadow Lane Oakland",
-    date: "Just now",
-    status: "In Progress",
-  },
-  {
-    id: "#CM9802",
-    user: { name: "Kate Morrison", avatar: "/avatars/kate.jpg" },
-    project: "CRM Admin pages",
-    address: "Larry San Francisco",
-    date: "A minute ago",
-    status: "Complete",
-  },
-  {
-    id: "#CM9803",
-    user: { name: "Drew Cano", avatar: "/avatars/drew.jpg" },
-    project: "Client Project",
-    address: "Bagwell Avenue Ocala",
-    date: "1 hour ago",
-    status: "Pending",
-  },
-  {
-    id: "#CM9804",
-    user: { name: "Orlando Diggs", avatar: "/avatars/orlando.jpg" },
-    project: "Admin Dashboard",
-    address: "Washburn Baton Rouge",
-    date: "Yesterday",
-    status: "Approved",
-  },
-  {
-    id: "#CM9805",
-    user: { name: "Andi Lane", avatar: "/avatars/andi.jpg" },
-    project: "App Landing Page",
-    address: "Nest Lane Olivette",
-    date: "Feb 2, 2023",
-    status: "Rejected",
-  },
-];
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case "Complete":
-      return { color: "success", icon: "•" };
-    case "In Progress":
-      return { color: "info", icon: "•" };
-    case "Pending":
-      return { color: "warning", icon: "•" };
-    case "Approved":
-      return { color: "warning", icon: "★" };
-    case "Rejected":
-      return { color: "error", icon: "•" };
-    default:
-      return { color: "default", icon: "•" };
-  }
-};
+const { cols, rows: orders } = ORDERS_MOCK;
+const PER_PAGE = 5;
 
 export default function OrderList() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const { mode } = useColorMode();
+  const currPageOrders = orders.slice(
+    (currentPage - 1) * PER_PAGE,
+    currentPage * PER_PAGE
+  );
+
   return (
-    <Box sx={{ p: 3, width: "100%" }}>
+    <Box sx={{ p: 3, width: "100%", bgcolor: "background.paper" }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Order List
       </Typography>
 
-      <Box sx={{ display: "flex", mb: 2, alignItems: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          mb: 2,
+          alignItems: "center",
+          background: ORDER_LIST_ACTIONS_STYLES[mode]?.bg ?? "inherit",
+          p: 1,
+          borderRadius: 1,
+        }}
+      >
         <IconButton size="small">
           <Add />
         </IconButton>
@@ -134,45 +60,35 @@ export default function OrderList() {
           <Sort />
         </IconButton>
         <Box sx={{ flexGrow: 1 }} />
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            width: 200,
-          }}
-        >
-          <input
-            style={{
-              border: "none",
-              outline: "none",
-              width: "100%",
-              fontSize: "14px",
-            }}
-            placeholder="Search"
+        <SearchWrapper variant="outlined" sx={{ maxWidth: 160 }}>
+          <Search size={16} style={{ marginRight: 6, color: "#9e9e9e" }} />
+          <InputBase
+            placeholder="Search…"
+            sx={{ fontSize: 14 }}
+            inputProps={{ "aria-label": "search" }}
           />
-        </Paper>
+        </SearchWrapper>
       </Box>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
         <Table sx={{ minWidth: 650 }} size="small">
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
                 <Checkbox />
               </TableCell>
-              <TableCell>Order ID</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Project</TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Status</TableCell>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    {col.label}
+                  </Typography>
+                </TableCell>
+              ))}
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order, index) => {
+            {currPageOrders.map((order, index) => {
               const statusInfo = getStatusColor(order.status);
               return (
                 <TableRow key={index}>
@@ -183,7 +99,7 @@ export default function OrderList() {
                   <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Avatar
-                        src={order.user.avatar}
+                        src={order.avatar}
                         sx={{ width: 24, height: 24, mr: 1 }}
                       />
                       {order.user.name}
@@ -196,12 +112,13 @@ export default function OrderList() {
                     <Chip
                       label={order.status}
                       size="small"
-                      icon={<span>{statusInfo.icon}</span>}
+                      icon={<span>•</span>}
                       color={statusInfo.color}
                       variant="outlined"
                       sx={{
                         borderRadius: 1,
                         "& .MuiChip-icon": { fontSize: 16, marginLeft: 1 },
+                        border: "none",
                       }}
                     />
                   </TableCell>
@@ -212,39 +129,14 @@ export default function OrderList() {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
-            &lt;
-          </IconButton>
-          <IconButton
-            size="small"
-            sx={{
-              border: "1px solid #e0e0e0",
-              bgcolor: "primary.main",
-              color: "white",
-            }}
-          >
-            1
-          </IconButton>
-          <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
-            2
-          </IconButton>
-          <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
-            3
-          </IconButton>
-          <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
-            4
-          </IconButton>
-          <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
-            5
-          </IconButton>
-          <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
-            &gt;
-          </IconButton>
-        </Box>
-      </Box>
+      <Grid display="flex" justifyContent="flex-end" mt={2}>
+        <Pagination
+          count={Math.ceil(orders.length / PER_PAGE)}
+          page={currentPage}
+          shape="rounded"
+          onChange={(_, value) => setCurrentPage(value)}
+        />
+      </Grid>
     </Box>
   );
 }

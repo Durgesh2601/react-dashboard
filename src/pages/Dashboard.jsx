@@ -1,12 +1,7 @@
 import { Box, Paper, Typography, Grid } from "@mui/material";
 import { Moving, TrendingDown } from "@mui/icons-material";
 import { useColorMode } from "../theme/ThemeContext";
-import {
-  cardColors,
-  gridStyle,
-  METRICS,
-  COMMON_GRID_STYLE,
-} from "../constants/constants";
+import { cardColors, gridStyle, METRICS } from "../constants/constants";
 import { TopSellingProducts } from "../components/TopSellingProducts";
 import TotalSales from "../components/TotalSales";
 import RevenueByLocation from "../components/RevenueByLocation";

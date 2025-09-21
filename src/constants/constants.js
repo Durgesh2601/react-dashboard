@@ -1,3 +1,9 @@
+import first from "../assets/1.svg";
+import second from "../assets/2.svg";
+import third from "../assets/3.svg";
+import fourth from "../assets/4.svg";
+import fifth from "../assets/5.svg";
+
 export const cardColors = {
   light: [
     { bg: "#E3F5FF", text: "rgba(0, 0, 0, 0.87)" }, // Customers - light blue
@@ -132,4 +138,118 @@ export const CHART_STROKE_COLOR_1 = {
 export const CHART_STROKE_COLOR_2 = {
   light: "#90caf9", // light blue
   dark: "#A8C5DA", // muted blue
+};
+
+export const ORDER_LIST_ACTIONS_STYLES = {
+  light: {
+    bg: "#F7F9FB",
+    color: "rgba(0, 0, 0, 0.87)",
+  },
+  dark: {
+    bg: "#292929",
+    color: "#1C1C1C",
+  },
+};
+
+export const ORDERS_MOCK = {
+  cols: [
+    { id: "order_id", label: "Order ID" },
+    { id: "user", label: "User" },
+    { id: "project", label: "Project" },
+    { id: "address", label: "Address" },
+    { id: "date", label: "Date" },
+    { id: "status", label: "Status" },
+  ],
+  rows: [
+    {
+      id: "#CM9806",
+      user: { name: "Sophie Turner", avatar: "/avatars/sophie.jpg" },
+      project: "E-Commerce Platform",
+      address: "Broadway New York",
+      date: "2 hours ago",
+      status: "In Progress",
+      avatar: first,
+    },
+    {
+      id: "#CM9807",
+      user: { name: "Michael Chen", avatar: "/avatars/michael.jpg" },
+      project: "Marketing Dashboard",
+      address: "Mission District SF",
+      date: "Today",
+      status: "Complete",
+      avatar: second,
+    },
+    {
+      id: "#CM9808",
+      user: { name: "Emma Wilson", avatar: "/avatars/emma.jpg" },
+      project: "Portfolio Website",
+      address: "Lincoln Park Chicago",
+      date: "3 days ago",
+      status: "Pending",
+      avatar: third,
+    },
+    {
+      id: "#CM9809",
+      user: { name: "Lucas Martin", avatar: "/avatars/lucas.jpg" },
+      project: "Mobile Banking App",
+      address: "Sunset Blvd LA",
+      date: "Jan 28, 2023",
+      status: "Approved",
+      avatar: fourth,
+    },
+    {
+      id: "#CM9810",
+      user: { name: "Isabella Green", avatar: "/avatars/isabella.jpg" },
+      project: "HR Management System",
+      address: "Capitol Hill Seattle",
+      date: "Jan 15, 2023",
+      status: "Rejected",
+      avatar: fifth,
+    },
+    {
+      id: "#CM9811",
+      user: { name: "Daniel Lee", avatar: "/avatars/daniel.jpg" },
+      project: "Social Media App",
+      address: "King Street Toronto",
+      date: "5 minutes ago",
+      status: "In Progress",
+      avatar: first,
+    },
+    {
+      id: "#CM9812",
+      user: { name: "Olivia Brown", avatar: "/avatars/olivia.jpg" },
+      project: "Restaurant POS System",
+      address: "Market Street Denver",
+      date: "Yesterday",
+      status: "Complete",
+      avatar: second,
+    },
+    {
+      id: "#CM9813",
+      user: { name: "Ethan Walker", avatar: "/avatars/ethan.jpg" },
+      project: "Fitness Tracker",
+      address: "Queens New York",
+      date: "2 weeks ago",
+      status: "Pending",
+      avatar: third,
+    },
+    {
+      id: "#CM9814",
+      user: { name: "Sophia Davis", avatar: "/avatars/sophia.jpg" },
+      project: "Inventory App",
+      address: "Union Square Boston",
+      date: "Feb 5, 2023",
+      status: "Approved",
+      avatar: fourth,
+    },
+    {
+      id: "#CM9815",
+      user: { name: "James Miller", avatar: "/avatars/james.jpg" },
+      project: "Learning Platform",
+      address: "Bay Area San Jose",
+      date: "Feb 1, 2023",
+      status: "Rejected",
+      avatar: fifth,
+    },
+  ],
 };
