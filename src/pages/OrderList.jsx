@@ -16,41 +16,55 @@ import {
   InputBase,
   Pagination,
   Grid,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-import { Add, FilterList, Search, Sort } from "@mui/icons-material";
+import {
+  Add,
+  FilterList,
+  Search,
+  Sort,
+  MoreVert,
+  Delete,
+} from "@mui/icons-material";
 import { useColorMode } from "../theme/ThemeContext";
 import { ORDER_LIST_ACTIONS_STYLES, ORDERS_MOCK } from "../constants/constants";
 import { SearchWrapper } from "../components/helpers";
 import { getFilteredOrders, getSortedOrders, getStatusColor } from "../utils";
 
-const { cols, rows: orders } = ORDERS_MOCK;
+const { cols, rows: initialOrders } = ORDERS_MOCK;
 const PER_PAGE = 5;
 
 export default function OrderList() {
+  const [rows, setRows] = useState(initialOrders);
   const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState([]);
   const [sortAsc, setSortAsc] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [activeRow, setActiveRow] = useState(null);
+  const [deletingRow, setDeletingRow] = useState(null);
+
   const { mode } = useColorMode();
 
+  // --- debounce search ---
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(searchQuery.toLowerCase());
-      setCurrentPage(1); // reset page when searching
+      setCurrentPage(1);
     }, 400);
-
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
   // --- filter orders ---
   const filteredOrders = useMemo(
-    () => getFilteredOrders(orders, debouncedQuery),
-    [orders, debouncedQuery]
+    () => getFilteredOrders(rows, debouncedQuery),
+    [rows, debouncedQuery]
   );
 
-  // --- sorting logic on Order ID ---
+  // --- sorting logic ---
   const sortedOrders = useMemo(
     () => getSortedOrders(filteredOrders, sortAsc),
     [filteredOrders, sortAsc]
@@ -66,7 +80,6 @@ export default function OrderList() {
   const isPageAllSelected = currPageOrders.every((o) =>
     selected.includes(o.id)
   );
-
   const isPageIndeterminate =
     currPageOrders.some((o) => selected.includes(o.id)) && !isPageAllSelected;
 
@@ -93,6 +106,38 @@ export default function OrderList() {
   const handleSort = () => {
     setSortAsc((prev) => !prev);
     setCurrentPage(1);
+  };
+
+  // --- Menu Actions ---
+  const handleMenuOpen = (event, rowId) => {
+    setMenuAnchor(event.currentTarget);
+    setActiveRow(rowId);
+  };
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+    setActiveRow(null);
+  };
+
+  const handleDelete = (rowId) => {
+    setDeletingRow(rowId);
+    handleMenuClose();
+
+    // wait for collapse animation then remove row
+    setTimeout(() => {
+      setRows((prev) => prev.filter((r) => r.id !== rowId));
+      setDeletingRow(null);
+    }, 300);
+  };
+
+  const handleBulkDelete = () => {
+    // Animate first
+    setDeletingRow([...selected]); // can store array of deleting ids
+
+    setTimeout(() => {
+      setRows((prev) => prev.filter((r) => !selected.includes(r.id)));
+      setDeletingRow(null);
+      setSelected([]); // clear selection
+    }, 300);
   };
 
   return (
@@ -154,16 +199,44 @@ export default function OrderList() {
               {cols.map((col) => (
                 <TableCell key={col.id}>{col.label}</TableCell>
               ))}
-              <TableCell></TableCell>
+              <TableCell align="right">
+                {selected.length > 0 && (
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => handleBulkDelete()}
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                )}
+              </TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {currPageOrders.map((order, index) => {
+            {currPageOrders.map((order) => {
               const statusInfo = getStatusColor(order.status);
               const isChecked = selected.includes(order.id);
+              const isDeleting = Array.isArray(deletingRow)
+                ? deletingRow.includes(order.id)
+                : deletingRow === order.id;
 
               return (
-                <TableRow key={index}>
+                <TableRow
+                  key={order.id}
+                  sx={{
+                    transition: "all 0.3s ease",
+                    opacity: isDeleting ? 0 : 1,
+                    transform: isDeleting
+                      ? "translateX(-20px)"
+                      : "translateX(0)",
+                    height: isDeleting ? 0 : "auto",
+                    "&:hover .row-actions": {
+                      opacity: 1,
+                      transform: "translateX(0)",
+                    },
+                  }}
+                >
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isChecked}
@@ -197,7 +270,20 @@ export default function OrderList() {
                       }}
                     />
                   </TableCell>
-                  <TableCell align="right">•••</TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      className="row-actions"
+                      size="small"
+                      onClick={(e) => handleMenuOpen(e, order.id)}
+                      sx={{
+                        opacity: 0,
+                        transform: "translateX(10px)",
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      <MoreVert fontSize="small" />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               );
             })}
@@ -214,6 +300,18 @@ export default function OrderList() {
           onChange={(_, value) => setCurrentPage(value)}
         />
       </Grid>
+
+      {/* Row Menu */}
+      <Menu
+        anchorEl={menuAnchor}
+        open={Boolean(menuAnchor)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={() => handleDelete(activeRow)}>
+          <Delete fontSize="small" style={{ marginRight: 8 }} />
+          Delete
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }
