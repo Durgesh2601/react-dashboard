@@ -1,7 +1,5 @@
-import { Box, Paper, Typography, Grid } from "@mui/material";
-import { Moving, TrendingDown } from "@mui/icons-material";
+import { Box, Typography, Grid } from "@mui/material";
 import { useColorMode } from "../theme/ThemeContext";
-import { cardColors, gridStyle, METRICS } from "../constants/constants";
 import { TopSellingProducts } from "../components/TopSellingProducts";
 import TotalSales from "../components/TotalSales";
 import RevenueByLocation from "../components/RevenueByLocation";
@@ -29,7 +27,8 @@ export default function Dashboard() {
               size={{
                 xs: 12,
                 sm: 12,
-                md: 6,
+                md: 12,
+                lg: 6,
               }}
             >
               <Metrics mode={mode} />
@@ -40,7 +39,8 @@ export default function Dashboard() {
               size={{
                 xs: 12,
                 sm: 12,
-                md: 6,
+                md: 12,
+                lg: 6,
               }}
             >
               <ProjectionsVsActuals mode={mode} />

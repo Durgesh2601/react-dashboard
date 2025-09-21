@@ -11,7 +11,6 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  useTheme,
 } from "@mui/material";
 import {
   Dashboard,
@@ -25,16 +24,15 @@ import {
   ExpandLess,
   ExpandMore,
   Article,
-  Group,
   Public,
 } from "@mui/icons-material";
+import SidebarAvatar from "../assets/SidebarAvatar.png";
 
-const drawerWidth = 260;
+const drawerWidth = 212;
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const [subOpen, setSubOpen] = useState({});
-  const theme = useTheme();
   const location = useLocation();
 
   const toggleDrawer = () => setOpen(!open);
@@ -61,16 +59,18 @@ const Sidebar = () => {
         sx={{
           display: "flex",
           justifyContent: open ? "space-between" : "center",
+          alignItems: "center",
           px: 2,
         }}
       >
+        <img src={SidebarAvatar} alt="Logo" style={{ width: 24, height: 24 }} />
         {open && <Typography variant="h6">ByeWind</Typography>}
-        <IconButton onClick={toggleDrawer}>
-          <MenuIcon />
+        <IconButton onClick={toggleDrawer} size="small">
+          <MenuIcon fontSize="small" />
         </IconButton>
       </Toolbar>
       <Divider />
-      <List>
+      <List disablePadding>
         {/* Favorites Section */}
         {open && (
           <Typography
@@ -81,13 +81,13 @@ const Sidebar = () => {
         )}
         <ListItemButton>
           <ListItemIcon>
-            <Dashboard />
+            <Dashboard fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Overview" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <Folder />
+            <Folder fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Projects" />}
         </ListItemButton>
@@ -106,7 +106,7 @@ const Sidebar = () => {
           selected={location.pathname === "/"}
         >
           <ListItemIcon>
-            <Dashboard />
+            <Dashboard fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Default" />}
         </ListItemButton>
@@ -116,19 +116,19 @@ const Sidebar = () => {
           selected={location.pathname === "/orders"}
         >
           <ListItemIcon>
-            <ShoppingCart />
+            <ShoppingCart fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Orders" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <Folder />
+            <Folder fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Projects" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <School />
+            <School fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Online Courses" />}
         </ListItemButton>
@@ -141,10 +141,15 @@ const Sidebar = () => {
         )}
         <ListItemButton onClick={() => toggleSubmenu("profile")}>
           <ListItemIcon>
-            <Person />
+            <Person fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="User Profile" />}
-          {open && (subOpen["profile"] ? <ExpandLess /> : <ExpandMore />)}
+          {open &&
+            (subOpen["profile"] ? (
+              <ExpandLess fontSize="small" />
+            ) : (
+              <ExpandMore fontSize="small" />
+            ))}
         </ListItemButton>
         <Collapse in={subOpen["profile"]} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
@@ -164,25 +169,25 @@ const Sidebar = () => {
 
         <ListItemButton>
           <ListItemIcon>
-            <AccountCircle />
+            <AccountCircle fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Account" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <Business />
+            <Business fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Corporate" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <Article />
+            <Article fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Blog" />}
         </ListItemButton>
         <ListItemButton>
           <ListItemIcon>
-            <Public />
+            <Public fontSize="small" />
           </ListItemIcon>
           {open && <ListItemText primary="Social" />}
         </ListItemButton>

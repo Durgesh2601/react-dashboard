@@ -25,7 +25,9 @@ const Layout = () => {
           </Routes>
         </Box>
       </Box>
-      {openNotifications && <NotificationsPanel />}
+      {openNotifications && (
+        <NotificationsPanel setOpenNotifications={setOpenNotifications} />
+      )}
     </Box>
   );
 };

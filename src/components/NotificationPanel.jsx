@@ -7,8 +7,14 @@ import {
   ListItemText,
   Avatar,
   Divider,
+  IconButton,
 } from "@mui/material";
-import { BugReport, PersonAdd, WifiTethering } from "@mui/icons-material";
+import {
+  BugReport,
+  Close,
+  PersonAdd,
+  WifiTethering,
+} from "@mui/icons-material";
 import first from "../assets/1.svg";
 import second from "../assets/2.svg";
 import third from "../assets/3.svg";
@@ -76,7 +82,7 @@ const contacts = [
   { avatar: first, name: "Koray Okumus" },
 ];
 
-export default function NotificationsPanel() {
+export default function NotificationsPanel({ setOpenNotifications }) {
   return (
     <Box
       sx={{
@@ -89,9 +95,15 @@ export default function NotificationsPanel() {
       }}
     >
       {/* Notifications */}
-      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-        Notifications
-      </Typography>
+      <Box display="flex" justifyContent="space-between">
+        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          Notifications
+        </Typography>
+        <IconButton size="small" onClick={() => setOpenNotifications(false)}>
+          <Close fontSize="small" />
+        </IconButton>
+      </Box>
+
       <List disablePadding>
         {notifications.map((n, i) => (
           <ListItem key={i} sx={{ px: 0, alignItems: "center" }}>
