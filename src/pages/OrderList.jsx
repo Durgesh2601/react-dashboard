@@ -1,3 +1,4 @@
+import { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Paper,
@@ -20,19 +21,79 @@ import { Add, FilterList, Search, Sort } from "@mui/icons-material";
 import { useColorMode } from "../theme/ThemeContext";
 import { ORDER_LIST_ACTIONS_STYLES, ORDERS_MOCK } from "../constants/constants";
 import { SearchWrapper } from "../components/helpers";
-import { getStatusColor } from "../utils";
-import { useState } from "react";
+import { getFilteredOrders, getSortedOrders, getStatusColor } from "../utils";
 
 const { cols, rows: orders } = ORDERS_MOCK;
 const PER_PAGE = 5;
 
 export default function OrderList() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [selected, setSelected] = useState([]);
+  const [sortAsc, setSortAsc] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
   const { mode } = useColorMode();
-  const currPageOrders = orders.slice(
-    (currentPage - 1) * PER_PAGE,
-    currentPage * PER_PAGE
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery.toLowerCase());
+      setCurrentPage(1); // reset page when searching
+    }, 400);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  // --- filter orders ---
+  const filteredOrders = useMemo(
+    () => getFilteredOrders(orders, debouncedQuery),
+    [orders, debouncedQuery]
   );
+
+  // --- sorting logic on Order ID ---
+  const sortedOrders = useMemo(
+    () => getSortedOrders(filteredOrders, sortAsc),
+    [filteredOrders, sortAsc]
+  );
+
+  const currPageOrders = useMemo(
+    () =>
+      sortedOrders.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE),
+    [sortedOrders, currentPage]
+  );
+
+  // --- selection logic ---
+  const isPageAllSelected = currPageOrders.every((o) =>
+    selected.includes(o.id)
+  );
+
+  const isPageIndeterminate =
+    currPageOrders.some((o) => selected.includes(o.id)) && !isPageAllSelected;
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      const newSelected = [
+        ...new Set([...selected, ...currPageOrders.map((o) => o.id)]),
+      ];
+      setSelected(newSelected);
+    } else {
+      const newSelected = selected.filter(
+        (id) => !currPageOrders.map((o) => o.id).includes(id)
+      );
+      setSelected(newSelected);
+    }
+  };
+
+  const handleRowSelect = (id) => {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleSort = () => {
+    setSortAsc((prev) => !prev);
+    setCurrentPage(1);
+  };
 
   return (
     <Box sx={{ p: 3, width: "100%", bgcolor: "background.paper" }}>
@@ -40,6 +101,7 @@ export default function OrderList() {
         Order List
       </Typography>
 
+      {/* Action Bar */}
       <Box
         sx={{
           display: "flex",
@@ -56,33 +118,41 @@ export default function OrderList() {
         <IconButton size="small">
           <FilterList />
         </IconButton>
-        <IconButton size="small">
-          <Sort />
+        <IconButton size="small" onClick={handleSort}>
+          <Sort
+            style={{
+              transform: sortAsc ? "rotate(0deg)" : "rotate(180deg)",
+              transition: "transform 0.3s",
+            }}
+          />
         </IconButton>
         <Box sx={{ flexGrow: 1 }} />
-        <SearchWrapper variant="outlined" sx={{ maxWidth: 160 }}>
+        <SearchWrapper variant="outlined" sx={{ maxWidth: 200 }}>
           <Search size={16} style={{ marginRight: 6, color: "#9e9e9e" }} />
           <InputBase
             placeholder="Search…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             sx={{ fontSize: 14 }}
             inputProps={{ "aria-label": "search" }}
           />
         </SearchWrapper>
       </Box>
 
+      {/* Table */}
       <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
         <Table sx={{ minWidth: 650 }} size="small">
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
-                <Checkbox />
+                <Checkbox
+                  indeterminate={isPageIndeterminate}
+                  checked={isPageAllSelected}
+                  onChange={handleSelectAll}
+                />
               </TableCell>
               {cols.map((col) => (
-                <TableCell key={col.id}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    {col.label}
-                  </Typography>
-                </TableCell>
+                <TableCell key={col.id}>{col.label}</TableCell>
               ))}
               <TableCell></TableCell>
             </TableRow>
@@ -90,10 +160,15 @@ export default function OrderList() {
           <TableBody>
             {currPageOrders.map((order, index) => {
               const statusInfo = getStatusColor(order.status);
+              const isChecked = selected.includes(order.id);
+
               return (
                 <TableRow key={index}>
                   <TableCell padding="checkbox">
-                    <Checkbox />
+                    <Checkbox
+                      checked={isChecked}
+                      onChange={() => handleRowSelect(order.id)}
+                    />
                   </TableCell>
                   <TableCell>{order.id}</TableCell>
                   <TableCell>
@@ -129,9 +204,11 @@ export default function OrderList() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination */}
       <Grid display="flex" justifyContent="flex-end" mt={2}>
         <Pagination
-          count={Math.ceil(orders.length / PER_PAGE)}
+          count={Math.ceil(filteredOrders.length / PER_PAGE)}
           page={currentPage}
           shape="rounded"
           onChange={(_, value) => setCurrentPage(value)}
