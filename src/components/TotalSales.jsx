@@ -2,7 +2,7 @@ import { Box, Card, Typography, Stack } from "@mui/material";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import {
   gridStyle,
-  RevenueChart,
+  COMMON_GRID_STYLE,
   TOP_SALES_DATA,
 } from "../constants/constants";
 
@@ -12,8 +12,8 @@ export default function TotalSalesCard({ mode }) {
       sx={{
         p: 2,
         borderRadius: 3,
-        background: RevenueChart[mode].bg,
-        color: RevenueChart[mode].text,
+        background: COMMON_GRID_STYLE[mode].bg,
+        color: COMMON_GRID_STYLE[mode].text,
         ...gridStyle,
       }}
     >

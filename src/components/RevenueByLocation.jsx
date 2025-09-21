@@ -11,7 +11,7 @@ import {
 import {
   gridStyle,
   REVENUE_BY_LOCATION_MOCK,
-  RevenueChart,
+  COMMON_GRID_STYLE,
 } from "../constants/constants";
 import worldMap from "../assets/worldMap.svg";
 import React from "react";
@@ -21,8 +21,8 @@ export default function RevenueByLocation({ mode }) {
     <Paper
       sx={{
         p: 2,
-        background: RevenueChart[mode].bg,
-        color: RevenueChart[mode].text,
+        background: COMMON_GRID_STYLE[mode].bg,
+        color: COMMON_GRID_STYLE[mode].text,
         ...gridStyle,
       }}
     >

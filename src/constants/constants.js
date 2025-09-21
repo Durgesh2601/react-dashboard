@@ -13,7 +13,7 @@ export const cardColors = {
   ],
 };
 
-export const RevenueChart = {
+export const COMMON_GRID_STYLE = {
   light: {
     bg: "#F7F9FB",
     text: "rgba(0, 0, 0, 0.87)",
@@ -83,3 +83,53 @@ export const REVENUE_BY_LOCATION_MOCK = [
   { name: "Sydney", value: 25, label: "25K" },
   { name: "Singapore", value: 61, label: "61K" },
 ];
+
+export const METRICS = [
+  {
+    title: "Customers",
+    value: "3,781",
+    change: "+11.01%",
+    up: true,
+    colorIndex: 0,
+  },
+  {
+    title: "Orders",
+    value: "1,219",
+    change: "-0.03%",
+    up: false,
+    colorIndex: 1,
+  },
+  {
+    title: "Revenue",
+    value: "$695",
+    change: "+15.03%",
+    up: true,
+    colorIndex: 2,
+  },
+  {
+    title: "Growth",
+    value: "30.1%",
+    change: "+6.08%",
+    up: true,
+    colorIndex: 3,
+  },
+];
+
+export const REVENUE_CHART_MOCK = [
+  { month: "Jan", current: 12, previous: 7 },
+  { month: "Feb", current: 8, previous: 15 },
+  { month: "Mar", current: 9, previous: 13 },
+  { month: "Apr", current: 14, previous: 10 },
+  { month: "May", current: 20, previous: 12 },
+  { month: "Jun", current: 22, previous: 18 },
+];
+
+export const CHART_STROKE_COLOR_1 = {
+  light: "black",
+  dark: "#C6C7F8", // light blue
+};
+
+export const CHART_STROKE_COLOR_2 = {
+  light: "#90caf9", // light blue
+  dark: "#A8C5DA", // muted blue
+};

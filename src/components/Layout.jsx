@@ -2,8 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import Dashboard from "./Dashboard";
-import OrderList from "./OrderList";
+import Dashboard from "../pages/Dashboard";
+import OrderList from "../pages/OrderList";
 
 const Layout = () => {
   return (

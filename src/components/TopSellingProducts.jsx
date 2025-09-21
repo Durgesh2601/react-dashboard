@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {
   gridStyle,
-  RevenueChart,
+  COMMON_GRID_STYLE,
   TOP_SELLING_MOCK,
 } from "../constants/constants";
 
@@ -22,8 +22,8 @@ export const TopSellingProducts = ({ mode }) => {
       component={Paper}
       sx={{
         ...gridStyle,
-        background: RevenueChart[mode].bg,
-        color: RevenueChart[mode].text,
+        background: COMMON_GRID_STYLE[mode].bg,
+        color: COMMON_GRID_STYLE[mode].text,
       }}
     >
       <Typography
