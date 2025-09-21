@@ -18,6 +18,12 @@ import {
   Grid,
   Menu,
   MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import {
   Add,
@@ -46,6 +52,7 @@ export default function OrderList() {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [activeRow, setActiveRow] = useState(null);
   const [deletingRow, setDeletingRow] = useState(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   const { mode } = useColorMode();
 
@@ -119,6 +126,7 @@ export default function OrderList() {
   };
 
   const handleDelete = (rowId) => {
+    // Delete immediately without confirmation
     setDeletingRow(rowId);
     handleMenuClose();
 
@@ -129,9 +137,27 @@ export default function OrderList() {
     }, 300);
   };
 
+  // Keep this function for consistency with the bulk delete flow
+  const confirmSingleDelete = () => {
+    // This function is no longer used but kept for code structure
+    const rowId = activeRow;
+    setDeletingRow(rowId);
+    setConfirmDialogOpen(false);
+
+    setTimeout(() => {
+      setRows((prev) => prev.filter((r) => r.id !== rowId));
+      setDeletingRow(null);
+    }, 300);
+  };
+
   const handleBulkDelete = () => {
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmBulkDelete = () => {
     // Animate first
     setDeletingRow([...selected]); // can store array of deleting ids
+    setConfirmDialogOpen(false);
 
     setTimeout(() => {
       setRows((prev) => prev.filter((r) => !selected.includes(r.id)));
@@ -194,6 +220,7 @@ export default function OrderList() {
                   indeterminate={isPageIndeterminate}
                   checked={isPageAllSelected}
                   onChange={handleSelectAll}
+                  disabled={currPageOrders.length === 0}
                 />
               </TableCell>
               {cols.map((col) => (
@@ -204,7 +231,7 @@ export default function OrderList() {
                   <IconButton
                     size="small"
                     color="error"
-                    onClick={() => handleBulkDelete()}
+                    onClick={handleBulkDelete}
                   >
                     <Delete fontSize="small" />
                   </IconButton>
@@ -214,79 +241,91 @@ export default function OrderList() {
           </TableHead>
 
           <TableBody>
-            {currPageOrders.map((order) => {
-              const statusInfo = getStatusColor(order.status);
-              const isChecked = selected.includes(order.id);
-              const isDeleting = Array.isArray(deletingRow)
-                ? deletingRow.includes(order.id)
-                : deletingRow === order.id;
+            {currPageOrders?.length > 0 ? (
+              currPageOrders.map((order) => {
+                const statusInfo = getStatusColor(order.status);
+                const isChecked = selected.includes(order.id);
+                const isDeleting = Array.isArray(deletingRow)
+                  ? deletingRow.includes(order.id)
+                  : deletingRow === order.id;
 
-              return (
-                <TableRow
-                  key={order.id}
-                  sx={{
-                    transition: "all 0.3s ease",
-                    opacity: isDeleting ? 0 : 1,
-                    transform: isDeleting
-                      ? "translateX(-20px)"
-                      : "translateX(0)",
-                    height: isDeleting ? 0 : "auto",
-                    "&:hover .row-actions": {
-                      opacity: 1,
-                      transform: "translateX(0)",
-                    },
-                  }}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isChecked}
-                      onChange={() => handleRowSelect(order.id)}
-                    />
-                  </TableCell>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Avatar
-                        src={order.avatar}
-                        sx={{ width: 24, height: 24, mr: 1 }}
+                return (
+                  <TableRow
+                    key={order.id}
+                    sx={{
+                      transition: "all 0.3s ease",
+                      opacity: isDeleting ? 0 : 1,
+                      transform: isDeleting
+                        ? "translateX(-20px)"
+                        : "translateX(0)",
+                      height: isDeleting ? 0 : "auto",
+                      "&:hover .row-actions": {
+                        opacity: 1,
+                        transform: "translateX(0)",
+                      },
+                    }}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isChecked}
+                        onChange={() => handleRowSelect(order.id)}
                       />
-                      {order.user.name}
-                    </Box>
-                  </TableCell>
-                  <TableCell>{order.project}</TableCell>
-                  <TableCell>{order.address}</TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={order.status}
-                      size="small"
-                      icon={<span>•</span>}
-                      color={statusInfo.color}
-                      variant="outlined"
-                      sx={{
-                        borderRadius: 1,
-                        "& .MuiChip-icon": { fontSize: 16, marginLeft: 1 },
-                        border: "none",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      className="row-actions"
-                      size="small"
-                      onClick={(e) => handleMenuOpen(e, order.id)}
-                      sx={{
-                        opacity: 0,
-                        transform: "translateX(10px)",
-                        transition: "all 0.3s ease",
-                      }}
-                    >
-                      <MoreVert fontSize="small" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                    </TableCell>
+                    <TableCell>{order.id}</TableCell>
+                    <TableCell>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Avatar
+                          src={order.avatar}
+                          sx={{ width: 24, height: 24, mr: 1 }}
+                        />
+                        {order.user.name}
+                      </Box>
+                    </TableCell>
+                    <TableCell>{order.project}</TableCell>
+                    <TableCell>{order.address}</TableCell>
+                    <TableCell>{order.date}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={order.status}
+                        size="small"
+                        icon={<span>•</span>}
+                        color={statusInfo.color}
+                        variant="outlined"
+                        sx={{
+                          borderRadius: 1,
+                          "& .MuiChip-icon": { fontSize: 16, marginLeft: 1 },
+                          border: "none",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        className="row-actions"
+                        size="small"
+                        onClick={(e) => handleMenuOpen(e, order.id)}
+                        sx={{
+                          opacity: 0,
+                          transform: "translateX(10px)",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        <MoreVert fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={cols.length + 2}
+                  align="center"
+                  sx={{ py: 5 }}
+                >
+                  No orders found.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -312,6 +351,28 @@ export default function OrderList() {
           Delete
         </MenuItem>
       </Menu>
+
+      {/* Confirmation Dialog - Only used for bulk delete */}
+      <Dialog
+        open={confirmDialogOpen}
+        onClose={() => setConfirmDialogOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirm Bulk Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete {selected.length} selected orders?
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDialogOpen(false)}>Cancel</Button>
+          <Button onClick={confirmBulkDelete} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
