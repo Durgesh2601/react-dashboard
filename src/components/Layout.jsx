@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import Dashboard from "../pages/Dashboard";
 import OrderList from "../pages/OrderList";
+import NotificationsPanel from "./NotificationPanel";
 
 const Layout = () => {
+  const [openNotifications, setOpenNotifications] = useState(false);
+
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       <Sidebar />
@@ -13,7 +17,7 @@ const Layout = () => {
         component="main"
         sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
       >
-        <Topbar />
+        <Topbar setOpenNotifications={setOpenNotifications} />
         <Box sx={{ flexGrow: 1, overflow: "auto" }}>
           <Routes>
             <Route index element={<Dashboard />} />
@@ -21,6 +25,7 @@ const Layout = () => {
           </Routes>
         </Box>
       </Box>
+      {openNotifications && <NotificationsPanel />}
     </Box>
   );
 };

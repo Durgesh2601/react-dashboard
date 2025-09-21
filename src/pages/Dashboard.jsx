@@ -11,7 +11,7 @@ import RevenueChart from "../components/RevenueChart";
 export default function Dashboard() {
   const { mode } = useColorMode();
   return (
-    <Box sx={{ p: 3, width: "100%" }}>
+    <Box sx={{ p: 3 }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
         eCommerce
       </Typography>

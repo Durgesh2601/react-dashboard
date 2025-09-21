@@ -21,7 +21,7 @@ import {
 import { useColorMode } from "../theme/ThemeContext";
 import { SearchWrapper } from "./helpers";
 
-export default function Topbar({ title }) {
+export default function Topbar({ title, setOpenNotifications }) {
   const { mode, toggleColorMode } = useColorMode();
 
   return (
@@ -80,7 +80,11 @@ export default function Topbar({ title }) {
           <IconButton size="small" color="default">
             <History size={18} />
           </IconButton>
-          <IconButton size="small" color="default">
+          <IconButton
+            size="small"
+            color="default"
+            onClick={() => setOpenNotifications((prev) => !prev)}
+          >
             <Notifications size={18} />
           </IconButton>
           <IconButton size="small" color="default">

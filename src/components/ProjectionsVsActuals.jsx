@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { COMMON_GRID_STYLE } from "../constants/constants";
+import React from "react";
 
 // Mock Data
 const data = [
@@ -20,7 +21,7 @@ const data = [
   { month: "Jun", actual: 21, projection: 25 },
 ];
 
-export default function ProjectionsVsActuals({ mode }) {
+function ProjectionsVsActuals({ mode }) {
   return (
     <Card
       sx={{
@@ -72,3 +73,5 @@ export default function ProjectionsVsActuals({ mode }) {
     </Card>
   );
 }
+
+export default React.memo(ProjectionsVsActuals);
