@@ -3,10 +3,8 @@ import {
   Paper,
   Typography,
   Grid,
-  Avatar,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   ListItemSecondaryAction,
   Divider,
@@ -16,6 +14,7 @@ import { useColorMode } from "../theme/ThemeContext";
 import { cardColors, gridStyle, RevenueChart } from "../constants/constants";
 import worldMap from "../assets/worldMap.svg";
 import { TopSellingProducts } from "./TopSellingProducts";
+import TotalSales from "./TotalSales";
 
 export default function Dashboard() {
   const { mode } = useColorMode();
@@ -338,30 +337,30 @@ export default function Dashboard() {
                 <List disablePadding>
                   <ListItem disableGutters>
                     <ListItemText primary="New York" />
-                    <ListItemSecondaryAction>
-                      <Typography variant="body2">72K</Typography>
-                    </ListItemSecondaryAction>
+                    {/* <ListItemSecondaryAction> */}
+                    <Typography variant="body2">72K</Typography>
+                    {/* </ListItemSecondaryAction> */}
                   </ListItem>
                   <Divider component="li" />
                   <ListItem disableGutters>
                     <ListItemText primary="San Francisco" />
-                    <ListItemSecondaryAction>
-                      <Typography variant="body2">39K</Typography>
-                    </ListItemSecondaryAction>
+                    {/* <ListItemSecondaryAction> */}
+                    <Typography variant="body2">39K</Typography>
+                    {/* </ListItemSecondaryAction> */}
                   </ListItem>
                   <Divider component="li" />
                   <ListItem disableGutters>
                     <ListItemText primary="Sydney" />
-                    <ListItemSecondaryAction>
-                      <Typography variant="body2">25K</Typography>
-                    </ListItemSecondaryAction>
+                    {/* <ListItemSecondaryAction> */}
+                    <Typography variant="body2">25K</Typography>
+                    {/* </ListItemSecondaryAction> */}
                   </ListItem>
                   <Divider component="li" />
                   <ListItem disableGutters>
                     <ListItemText primary="Singapore" />
-                    <ListItemSecondaryAction>
-                      <Typography variant="body2">61K</Typography>
-                    </ListItemSecondaryAction>
+                    {/* <ListItemSecondaryAction> */}
+                    <Typography variant="body2">61K</Typography>
+                    {/* </ListItemSecondaryAction> */}
                   </ListItem>
                 </List>
               </Paper>
@@ -375,6 +374,11 @@ export default function Dashboard() {
             <Grid item size={{ xs: 12, md: 8 }}>
               {/* <TopSellingProducts /> */}
               <TopSellingProducts mode={mode} />
+            </Grid>
+
+            <Grid item size={{ xs: 12, md: 4 }}>
+              {/* Total Sales /> */}
+              <TotalSales mode={mode} />
             </Grid>
           </Grid>
         </Grid>
