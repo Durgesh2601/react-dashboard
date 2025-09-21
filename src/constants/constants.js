@@ -76,3 +76,10 @@ export const TOP_SALES_DATA = [
   { name: "Sponsored", value: 154.02, color: "#8C9EFF" },
   { name: "E-mail", value: 48.96, color: "#81D4FA" },
 ];
+
+export const REVENUE_BY_LOCATION_MOCK = [
+  { name: "New York", value: 72, label: "72K" },
+  { name: "San Francisco", value: 39, label: "39K" },
+  { name: "Sydney", value: 25, label: "25K" },
+  { name: "Singapore", value: 61, label: "61K" },
+];

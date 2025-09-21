@@ -1,20 +1,10 @@
-import {
-  Box,
-  Paper,
-  Typography,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  Divider,
-} from "@mui/material";
+import { Box, Paper, Typography, Grid } from "@mui/material";
 import { Moving, TrendingDown } from "@mui/icons-material";
 import { useColorMode } from "../theme/ThemeContext";
 import { cardColors, gridStyle, RevenueChart } from "../constants/constants";
-import worldMap from "../assets/worldMap.svg";
 import { TopSellingProducts } from "./TopSellingProducts";
 import TotalSales from "./TotalSales";
+import RevenueByLocation from "./RevenueByLocation";
 
 export default function Dashboard() {
   const { mode } = useColorMode();
@@ -303,67 +293,8 @@ export default function Dashboard() {
                 md: 4,
               }}
             >
-              <Paper
-                sx={{
-                  p: 2,
-                  background: RevenueChart[mode].bg,
-                  color: RevenueChart[mode].text,
-                  ...gridStyle,
-                }}
-              >
-                <Typography
-                  variant="subtitle2"
-                  fontWeight="bold"
-                  sx={{ mb: 2 }}
-                >
-                  Revenue by Location
-                </Typography>
-                <Box
-                  sx={{ mb: 2 }}
-                  display="flex"
-                  justifyContent="center"
-                  flexDirection="column"
-                  alignItems="center"
-                  gap={2}
-                >
-                  <img
-                    src={worldMap}
-                    alt="Map"
-                    width="154px"
-                    height="82px"
-                    style={{ borderRadius: 8 }}
-                  />
-                </Box>
-                <List disablePadding>
-                  <ListItem disableGutters>
-                    <ListItemText primary="New York" />
-                    {/* <ListItemSecondaryAction> */}
-                    <Typography variant="body2">72K</Typography>
-                    {/* </ListItemSecondaryAction> */}
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem disableGutters>
-                    <ListItemText primary="San Francisco" />
-                    {/* <ListItemSecondaryAction> */}
-                    <Typography variant="body2">39K</Typography>
-                    {/* </ListItemSecondaryAction> */}
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem disableGutters>
-                    <ListItemText primary="Sydney" />
-                    {/* <ListItemSecondaryAction> */}
-                    <Typography variant="body2">25K</Typography>
-                    {/* </ListItemSecondaryAction> */}
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem disableGutters>
-                    <ListItemText primary="Singapore" />
-                    {/* <ListItemSecondaryAction> */}
-                    <Typography variant="body2">61K</Typography>
-                    {/* </ListItemSecondaryAction> */}
-                  </ListItem>
-                </List>
-              </Paper>
+              {/* <RevenueByLocation /> */}
+              <RevenueByLocation mode={mode} />
             </Grid>
           </Grid>
         </Grid>
