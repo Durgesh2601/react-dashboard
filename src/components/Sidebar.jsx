@@ -35,7 +35,10 @@ const Sidebar = () => {
   const [subOpen, setSubOpen] = useState({});
   const location = useLocation();
 
-  const toggleDrawer = () => setOpen(!open);
+  const toggleDrawer = () => {
+    setOpen(!open);
+    setSubOpen({}); // Close all submenus when toggling
+  };
 
   const toggleSubmenu = (key) => {
     setSubOpen((prev) => ({ ...prev, [key]: !prev[key] }));
